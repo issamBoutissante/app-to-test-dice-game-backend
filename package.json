@@ -1,0 +1,23 @@
+{
+  "name": "dicegametest",
+  "version": "1.0.0",
+  "description": "this is a front end app to test my dice game backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/issamBoutissante/app-to-test-dice-game-backend.git"
+  },
+  "author": "boutissante issam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/issamBoutissante/app-to-test-dice-game-backend/issues"
+  },
+  "homepage": "https://github.com/issamBoutissante/app-to-test-dice-game-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io-client": "^3.0.3"
+  }
+}
