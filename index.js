@@ -1,31 +1,44 @@
-const io = require("socket.io-client")("http://localhost:5000");
+const socket = require("socket.io-client")("http://localhost:5000");
 const express = require("express");
 const app = express();
+let isHoster = true;
+let name = "issam";
+let FriendName;
+let RoomId;
+
 app.get("/", (req, res) => {
-  res.send("hello issma from front end server");
+  res.send("hello issam from front end server");
 });
+
+//whene game started
+socket.on("GameStarted", ({ hosterName, friendName }) => {
+  if (isHoster) {
+    FriendName = friendName;
+  } else {
+    FriedName = hosterName;
+  }
+  console.log(`${name} and ${FriendName} are playing on room ${RoomId}`);
+});
+
 //set listeners
-io.on("joinRequest", ({ friendName }) => {
-  console.log(`${friendName} asked to join the game`);
-  io.emit("requestAccepted", { friendName }, ({ message }) => {
-    console.log(message);
+//on player started a new game
+socket.emit("startNewGame", { name }, ({ roomId }) => {
+  console.log(`${name} started new game....`);
+  RoomId = roomId;
+  console.log(`your id is ${RoomId}`);
+  socket.on("joinRequest", ({ name }) => {
+    console.log(`${name} asked to join the game`);
+    let isAccepted = true;
+    socket.emit("requestAnswer", { isAccepted });
   });
-  io.emit("requestDenied", ({ message }) => {
-    console.log(message);
+  //i put the join trigger just for test
+  socket.emit("joinGame", { name, roomId: RoomId }, ({ error }) => {
+    if (error) console.log(error);
   });
 });
-io.on("GameStarted", ({ hosterName, friendName, roomId }) => {
-  console.log(`${hosterName} and ${friendName} are playing on room ${roomId}`);
-});
+//on player joined a game
+
 //start New Game
-let hosterName = "issame";
-let roomId = "";
-io.emit("startNewGame", { hosterName }, ({ roomId }) => {
-  roomId = roomId;
-  console.log(roomId);
-  io.emit("joinGame", { friendName, roomId });
-});
-let friendName = "Chaimae";
 //join game
 
 app.listen("3000", () => {
